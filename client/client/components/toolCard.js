@@ -1,6 +1,6 @@
 const ToolCard = (props) => {
     return (
-      <div className="flex ml-4 mr-4 border-solid border-2 border-black">
+      <div className="flex ml-4 mr-4 border-solid border-2 bg-white">
         {props.children}
       </div>
     );

@@ -1,36 +1,47 @@
 const express = require('express')
+require('dotenv').config({ path: '../.env' })
 const app = express()
 const port = 3000
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 var db = require('./db')
 var mysql = require('mysql2')
+var session = require('express-session');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const cors = require('cors');
-require('dotenv').config({ path: '../.env' })
-app.use(cors());
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "localhost:8080");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: process.env.MYSQL_PASSWORD,
-})
-
+app.use(cors({
+  origin: 'http://localhost:8080',
+  credentials: true, 
+}));
+app.use(session({ secret: process.env.SESSION_SECRET, cookie: { maxAge: 60000 }}))
 
 app.get('/', (req, res) => {
   console.log(cors);
- // db.initializeDatabase();
+  //db.initializeDatabase();
+  console.log(req.session)
   res.send('Hello World!')
 })
 
-app.get('/signup', async (req, res) => {
-  req.session.set('user', {id: 230});
-  await req.session.save();
-  res.send({ ok: true });
-  var username = req.username;
+app.post('/register', async (req, res) => {
+  const usernameExists = await db.userExists(req.body.username);
+  const emailExists = await db.emailExists(req.body.email);
+  if (!usernameExists && !emailExists) {
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+      bcrypt.hash(req.body.password, salt, async (err, hash) => {
+           const result = await db.createUser(req.body.email, req.body.username, hash);
+           const user = {
+             id : result.insertId,
+             name : req.body.username
+            }
+            req.session.user = user;
+            req.session.created = 1;
+            res.end();
+      })
+    });
+  } else {
+    res.send({ ok: false });
+  }
 })
 
 app.listen(port, () => {
