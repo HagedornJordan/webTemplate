@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
 import ToolCard from "./toolCard";
+import { useSelector, useDispatch } from 'react-redux'
+import { setUser } from "../features/user/userSlice";
 import axiosInstance from "../helpers/axios";
 
 axiosInstance.defaults.withCredentials = "True";
@@ -10,8 +12,10 @@ const initialFields = {
 };
 
 const AuthForm = (props) => {
+    const user = useSelector((state) => state.user.username)
+    const dispatch = useDispatch()
+
     const [isSignup, setSignup] = useState(false);
-    console.log("here")
     var requestUrl = "http://localhost:3000/login"
     let fields = initialFields;
 
@@ -33,7 +37,6 @@ const AuthForm = (props) => {
   const handleSubmit = (event) => {
     const user = {
       username: formFields.username,
-      password: formFields.password,
       email : formFields.email,
     };
     event.preventDefault();
@@ -43,11 +46,12 @@ const AuthForm = (props) => {
         withCredentials: true ,
         data: {
           username: user.username,
-          password: user.password,
+          password: formFields.password,
           email : user.email
         }
       }).then((res) => {
-        console.log(res);
+        console.log(res)
+        dispatch(setUser(user));
       });
   };
 

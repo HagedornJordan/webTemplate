@@ -17,9 +17,8 @@ app.use(cors({
 app.use(session({ secret: process.env.SESSION_SECRET, cookie: { maxAge: 60000 }}))
 
 app.get('/', (req, res) => {
-  console.log(cors);
   //db.initializeDatabase();
-  console.log(req.session)
+  // console.log(req.session)
   res.send('Hello World!')
 })
 
@@ -35,8 +34,7 @@ app.post('/register', async (req, res) => {
              name : req.body.username
             }
             req.session.user = user;
-            req.session.created = 1;
-            res.end();
+            res.send({ok : true})
       })
     });
   } else {

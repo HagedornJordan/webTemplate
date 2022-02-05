@@ -8,6 +8,7 @@ import LoginCard from "../components/loginCard";
 import {useState, useEffect} from 'react'
 
 export default function Home() {
+
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState(null);
   useEffect(() => {
