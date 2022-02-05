@@ -36,7 +36,7 @@ app.post('/register', async (req, res) => {
             }
             req.session.user = user;
             req.session.created = 1;
-            res.end();
+            res.send({ ok: true });
       })
     });
   } else {

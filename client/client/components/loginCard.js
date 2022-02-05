@@ -5,7 +5,7 @@ const LoginCard = (props) => {
   if (axios.defaults.headers.common.Authorization) {
     return <h1> "hi" </h1>;
   }
-  return <AuthForm callBack={props.callBack} isSignupForm={true}></AuthForm>;
+  return <AuthForm userSetCB={props.userSetCB} isSignupForm={true}></AuthForm>;
 };
 
 export default LoginCard;

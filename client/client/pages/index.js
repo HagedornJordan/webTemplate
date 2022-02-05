@@ -12,15 +12,20 @@ export default function Home() {
   const [user, setUser] = useState(null);
   useEffect(() => {
       setMounted(true)
-      const userJson = localStorage.getItem('current_user');
-      console.log(userJson);
-      if (userJson) setUser(JSON.parse(userJson));
+      const storedUser = localStorage.getItem('current_user');
+      if (storedUser) setUser(storedUser);
   }, [])
+
+ const userSetCB = (user) => {
+    localStorage.setItem('current_user', user);
+    setUser(user);
+  }
+
   return (
     <>
       <NavHeader user={user}/>
       <CenterLayout>
-        {mounted && (user === null) && <LoginCard callBack={setUser}/> }
+        {mounted && (user === null) && <LoginCard userSetCB={userSetCB}/> }
       </CenterLayout>
     </>
   );

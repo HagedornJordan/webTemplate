@@ -1,7 +1,7 @@
 import axiosInstance from "../helpers/axios";
 
 const NavHeader = (props) => {
-    const username = props.user?.name;
+    const username = props.user;
     console.log(username);
     axiosInstance.request({
         url: "http://localhost:3000",

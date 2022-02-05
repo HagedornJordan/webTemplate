@@ -47,7 +47,7 @@ const AuthForm = (props) => {
           email : user.email
         }
       }).then((res) => {
-        console.log(res);
+        if (res.data.ok) props.userSetCB(user.username)
       });
   };
 
