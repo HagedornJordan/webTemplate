@@ -16,11 +16,40 @@ app.use(cors({
 }));
 app.use(session({ secret: process.env.SESSION_SECRET, cookie: { maxAge: 60000 }}))
 
+const invalidStatus = {status: "INVALID"};
+const errorStatus = {status : "ERROR"};
+const successStatus = {status: "SUCCESS"};
+const failureStatus = {status: "FAILURE"};
+
+
 app.get('/', (req, res) => {
-  console.log(cors);
   //db.initializeDatabase();
-  console.log(req.session)
   res.send('Hello World!')
+})
+
+app.post('/login', async (req, res) => {
+  const userByUsername = await db.getUserByUsername(req.body.username);
+  const userRecord = userByUsername[0];
+  bcrypt.compare(req.body.password, userRecord.password, (err, result) => {
+    if (result) {
+      const user = {
+        id : userRecord.id,
+        name : userRecord.name,
+       }
+       req.session.user = user;
+       res.send(successStatus);
+    } else {
+      res.send(invalidStatus)
+    }
+  });
+});
+
+app.get('/logout', (req, res) => {
+  console.log("HHH")
+  req.session.destroy((err) => {
+    if (err) res.send(errorStatus);
+    else res.send(successStatus);
+  })
 })
 
 app.post('/register', async (req, res) => {
@@ -36,11 +65,11 @@ app.post('/register', async (req, res) => {
             }
             req.session.user = user;
             req.session.created = 1;
-            res.send({ ok: true });
+            res.send(successStatus);
       })
     });
   } else {
-    res.send({ ok: false });
+    res.send(failureStatus);
   }
 })
 

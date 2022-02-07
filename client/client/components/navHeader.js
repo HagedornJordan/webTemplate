@@ -1,5 +1,5 @@
 import axiosInstance from "../helpers/axios";
-
+import logout from "../helpers/auth";
 const NavHeader = (props) => {
     const username = props.user;
     console.log(username);
@@ -16,7 +16,12 @@ const NavHeader = (props) => {
           Template
         </h1>
         <div className="justify-self-end pr-4"> 
-          {username && <h1 className=" font-sans text-1xl font-semibold subpixel-antialiased">Hello, {username}</h1> }
+          {username && 
+          <div>
+          <h1 className=" font-sans text-1xl font-semibold subpixel-antialiased">Hello, {username}</h1> 
+          <button onClick={logout}> Logout </button>
+          </div>
+           }
         </div>
       </div>
     );

@@ -49,4 +49,9 @@ const createUser = async (email, username, password) => {
   return res;
 }
 
-module.exports = {initializeDatabase, userExists, emailExists, createUser}
+const getUserByUsername = async (username) => {
+  const res = await executeQuery("SELECT * FROM users WHERE name=?", [username]);
+  console.log(res)
+  return res;
+}
+module.exports = {initializeDatabase, userExists, emailExists, createUser, getUserByUsername}
