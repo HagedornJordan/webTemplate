@@ -7,6 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 var db = require('./db')
 var mysql = require('mysql2')
 var session = require('express-session');
+var requestLogger = require('./requestLogger')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const cors = require('cors');
@@ -15,6 +16,7 @@ app.use(cors({
   credentials: true, 
 }));
 app.use(session({ secret: process.env.SESSION_SECRET, cookie: { maxAge: 60000 }}))
+app.use(requestLogger)
 
 const invalidStatus = {status: "INVALID"};
 const errorStatus = {status : "ERROR"};

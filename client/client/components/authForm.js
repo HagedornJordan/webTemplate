@@ -113,7 +113,7 @@ const AuthForm = (props) => {
               value={formFields[val[0].value]}
                 className="border-2"
                 id={val[0]}
-                type="text"
+                type={val[0] === "password" ? "password" : "text"}
                 onChange={handleFieldChange}
               ></input>
             </div >

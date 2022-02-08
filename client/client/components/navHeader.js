@@ -2,13 +2,6 @@ import axiosInstance from "../helpers/axios";
 import logout from "../helpers/auth";
 const NavHeader = (props) => {
     const username = props.user;
-    console.log(username);
-    axiosInstance.request({
-        url: "http://localhost:3000",
-        method: "get",
-      }).then((res) => {
-        console.log(res);
-      });
     return (
       <div className="flex justify-between min-w-full pl-4 pb-3 mb-5 bg-primary">
         <h1 className=" font-sans text-2xl font-semibold subpixel-antialiased">
