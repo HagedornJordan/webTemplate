@@ -47,7 +47,6 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  console.log("HHH")
   req.session.destroy((err) => {
     if (err) res.send(errorStatus);
     else res.send(successStatus);
@@ -73,6 +72,12 @@ app.post('/register', async (req, res) => {
   } else {
     res.send(failureStatus);
   }
+})
+
+app.get('/requestLogs', async (req, res) => {
+  const allLogs = await db.getLogs();
+  console.log(allLogs)
+  res.send(allLogs);
 })
 
 app.listen(port, () => {

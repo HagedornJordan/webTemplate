@@ -17,7 +17,7 @@ connection.connect(error => {
 });
 connection.connect((err) => {
   if (err) throw err;
-  resetDatabase();
+  //resetDatabase();
 });
 
 const executeQuery = (query, params) => {
@@ -59,7 +59,6 @@ const seedAdmin = async () => {
   const passwordHash = await bcryptFunctions.generateHash(process.env.ADMIN_PASSWORD);
   const admin = await createUser(process.env.ADMIN_EMAIL, process.env.ADMIN_USERNAME, passwordHash);
   const role = await createRole("Administrator", "Full Permissions");
-  console.log(admin); console.log(role)
   assignRole(admin.insertId, role.insertId)
 }
 
@@ -90,14 +89,17 @@ const assignRole = async(userId, roleId) => {
 
 const getUserByUsername = async (username) => {
   const res = await executeQuery("SELECT * FROM users WHERE name=?", [username]);
-  console.log(res)
   return res;
 }
 
 const createLog = async (userId, requestTime, request) => {
   const res = await executeQuery("INSERT INTO logs(time, userId, request) VALUES (?, ?, ?)",[requestTime, userId, request])
-  console.log(res);
   return res;
 }
 
-module.exports = {initializeDatabase, userExists, emailExists, createUser, getUserByUsername, createLog}
+const getLogs = async () => {
+  const res = await executeQuery("SELECT * FROM logs");
+  return res;
+}
+
+module.exports = {initializeDatabase, userExists, emailExists, createUser, getUserByUsername, createLog, getLogs}
