@@ -1,5 +1,6 @@
 import axiosInstance from "../helpers/axios";
 import logout from "../helpers/auth";
+import Link from "next/link";
 const NavHeader = (props) => {
   const username = props.user;
   return (
@@ -8,7 +9,9 @@ const NavHeader = (props) => {
         {" "}
         Template
       </h1>
-      <div></div>
+      <div className="justify-self-beginning">
+        <Link href="/adminDashboard"> Admin</Link>
+      </div>
       <div className="justify-self-end pr-4">
         {username && (
           <div>
